@@ -4,4 +4,3 @@ collab.db
 __pycache__/
 *.pyc
 *.docx
-*.txt

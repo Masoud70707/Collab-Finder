@@ -1,0 +1,4 @@
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\.venv\Scripts\Activate.ps1
+pip install flask werkzeug
+.\.venv\Scripts\python.exe app.py
