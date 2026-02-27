@@ -22,6 +22,55 @@ DB_PATH = BASE_DIR / "collab.db"
 UPLOAD_DIR = BASE_DIR / "uploads"
 UPLOAD_DIR.mkdir(exist_ok=True)
 
+# =========================
+# DB INIT FOR RENDER FIX
+# =========================
+
+def ensure_schema():
+    con = sqlite3.connect(DB_PATH)
+    con.row_factory = sqlite3.Row
+    cur = con.cursor()
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT NOT NULL UNIQUE,
+        password_hash TEXT NOT NULL,
+        photo_filename TEXT,
+        title TEXT,
+        full_name TEXT,
+        country TEXT,
+        university TEXT,
+        school_faculty TEXT,
+        highest_qualification TEXT,
+        position TEXT,
+        supervisor_name TEXT,
+        bio TEXT,
+        skills TEXT,
+        device_access TEXT,
+        created_at TEXT,
+        updated_at TEXT
+    )
+    """)
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS messages (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        sender_id INTEGER NOT NULL,
+        recipient_id INTEGER NOT NULL,
+        body TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        read_at TEXT,
+        FOREIGN KEY(sender_id) REFERENCES users(id),
+        FOREIGN KEY(recipient_id) REFERENCES users(id)
+    )
+    """)
+
+    con.commit()
+    con.close()
+
+# =========================
+
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp"}
 MAX_UPLOAD_MB = 5
 
@@ -1208,7 +1257,7 @@ def thread(user_id):
     finally:
         con.close()
 
-
+ensure_schema()
 # -----------------------------
 # CLI entry
 # -----------------------------
