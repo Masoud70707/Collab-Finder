@@ -52,6 +52,26 @@ def ensure_schema():
         updated_at TEXT
     )
     """)
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS profiles (
+        user_id INTEGER PRIMARY KEY,
+        photo_filename TEXT,
+        title TEXT,
+        full_name TEXT,
+        country TEXT,
+        university TEXT,
+        school_faculty TEXT,
+        highest_qualification TEXT,
+        position TEXT,
+        supervisor_name TEXT,
+        bio TEXT,
+        skills TEXT,
+        device_access TEXT,
+        updated_at TEXT,
+        created_at TEXT,
+        FOREIGN KEY(user_id) REFERENCES users(id)
+    )
+    """)
 
     cur.execute("""
     CREATE TABLE IF NOT EXISTS messages (
